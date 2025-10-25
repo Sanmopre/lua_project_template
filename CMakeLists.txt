@@ -10,4 +10,6 @@ include(cmake/lua.cmake)
 add_executable(lua_test
         src/main.cpp)
 
+target_include_directories(lua_test PRIVATE submodules/sol2/include)
+
 target_link_libraries(lua_test PUBLIC lua)

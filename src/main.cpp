@@ -1,32 +1,23 @@
+#include <sol/sol.hpp>
 #include <iostream>
 
-extern "C"
-{
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
-}
+int main() {
+  sol::state lua;
+  lua.open_libraries(sol::lib::base);
 
-int main()
-{
-  lua_State* L = luaL_newstate();
-  if (!L)
+  // Bind a function
+  lua.set_function("cpp_hello", [](const std::optional<std::string>& arg)
   {
-    std::cerr << "Failed to create Lua state!" << std::endl;
-    return 1;
-  }
+    if (arg.has_value()) {
+      std::cout << "Hello from C++! " << arg.value() << std::endl;
+    }
+  });
 
-  luaL_openlibs(L);
-
-  auto script = "/home/sanmopre/development/lua_project_template/src/scripts/script.lua";
-
-  if (luaL_dofile(L, script) != LUA_OK)
-  {
-    std::cerr << "Error running Lua script: " << lua_tostring(L, -1) << std::endl;
-    lua_pop(L, 1);
-  }
-
-  lua_close(L);
+  // Execute Lua code
+  lua.script(R"(
+        print("Hello from Lua!")
+        cpp_hello("assa")
+    )");
 
   return 0;
 }
