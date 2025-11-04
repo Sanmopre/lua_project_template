@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include(cmake/lua.cmake)
 
 add_executable(lua_test
-        src/main.cpp)
+        src/main.cpp
+        src/dummy_class.h)
 
 target_include_directories(lua_test PRIVATE submodules/sol2/include)
 

@@ -1,11 +1,32 @@
 #include <chrono>
 #include <sol/sol.hpp>
 
+#include "dummy_class.h"
+
 int main()
 {
 
     sol::state lua;
     lua.open_libraries(sol::lib::base, sol::lib::string);
+
+    lua.new_usertype<Data>("Data",
+        sol::constructors<Data()>(),
+        "id",   &Data::id,
+        "name", &Data::name,
+        "age",  &Data::age
+    );
+
+    // 2) Expose DummyClass, its methods, and vector<Data> access
+    lua.new_usertype<DummyClass>("DummyClass",
+        sol::constructors<DummyClass(std::string)>(),
+        "getName", &DummyClass::getName,
+        "getRandomList", &DummyClass::getRandomList,
+        "addData", &DummyClass::addData,
+        "getData", [](DummyClass& self) {
+            return sol::as_table(self.getData()); // present std::vector<Data> to Lua as a table
+        }
+    );
+
 
     sol::load_result chunk = lua.load_file("/home/sanmopre/development/lua_project_template/src/scripts/script.lua");
     if (!chunk.valid())
