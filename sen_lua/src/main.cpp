@@ -28,7 +28,7 @@ int main()
     );
 
 
-    sol::load_result chunk = lua.load_file("/home/sanmopre/development/lua_project_template/src/scripts/script.lua");
+    sol::load_result chunk = lua.load_file("/home/sanmopre/development/lua_project_template/sen_lua/src/scripts/script.lua");
     if (!chunk.valid())
     {
         const sol::error err = chunk;
